@@ -1,0 +1,12 @@
+## Exclude folder
+exclude/
+exclude
+data/
+data
+
+**/*.DS_Store
+.DS_Store
+*.DS_Store
+
+# PRIVATE environment variables and API keys
+00_PRIVATE.env
