@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Data Analysis with IA assistants (Copilot example)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="EDA_with_copilot_files/libs/clipboard/clipboard.min.js"></script>
+<script src="EDA_with_copilot_files/libs/quarto-html/quarto.js"></script>
+<script src="EDA_with_copilot_files/libs/quarto-html/popper.min.js"></script>
+<script src="EDA_with_copilot_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="EDA_with_copilot_files/libs/quarto-html/anchor.min.js"></script>
+<link href="EDA_with_copilot_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="EDA_with_copilot_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="EDA_with_copilot_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="EDA_with_copilot_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="EDA_with_copilot_files/libs/bootstrap/bootstrap-c0367b04c37547644fece4185067e4a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Exploratory Data Analysis with IA assistants (Copilot example)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Our goal in this example is to illustrate the use of AI code assistants such as Google’s Gemini or GitHub Copilot in any task involving code writing. We will use a data analysis problem as an example, but the same general ideas apply to many other situations.</p>
+<section id="prompt-guided-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-guided-analysis">Prompt guided analysis</h2>
+<ul>
+<li><p>The plan is to perform an initial exploration of a given dataset by asking the assistant questions (prompts) that will result in Python code output. When we ran this experiment we did not write a single line of Python code nor did we directly modify the code. When needed, we just asked the AI assistant to rewrite the code for us.</p></li>
+<li><p>We provide below the list of prompts that we used in our experiment with this dataset. We have also included the output we got in another version of this notebook. But keep in mind that (like in the juvenile 80’s books <em>Choose your own adventure</em>) different iterations of the analysis can lead you to different results. So the prompts below are more of guidelines…</p></li>
+</ul>
+<p align="center">
+<img src="https://dl.dropboxusercontent.com/scl/fi/bpbh13ecw5g7slisux1cb/Choose_Your_own_adventure_in_Data_Science.png?rlkey=gyg6os6kximsmsk0967kbgf26" width="250">
+</p>
+</section>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>The dataset we will use is the publicly available Kaggle dataset</p>
+<p><a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce"><strong>Brazilian E-Commerce Public Dataset by Olist</strong></a></p>
+<p>Olist is an e-commerce platform from Brazil that connects sellers (often small businesses) with potential buyers across the country. providing the required logistics. The dataset consists of several tables with information about customers, orders, user reviews, products, etc. We have provided you with a link to a zip file containing all these dataset. That zip file is the starting point of the adventure, in which we assume no previous knowledge of Python data structures or libraries, not even the format of those data files!</p>
+</section>
+</section>
+<section id="let-us-begin" class="level1">
+<h1>Let us begin</h1>
+<p>To proceed we suggest that you copy the text of the following prompt and click on the link to create code with AI in the next code cell. Then paste the prompt code and hit <em>Enter</em>.</p>
+<section id="prompt" class="level2">
+<h2 class="anchored" data-anchor-id="prompt">prompt:</h2>
+<p>I have a zip file at https://www.dropbox.com/scl/fi/4zxiotlnzt8a6ap2hu0je/brazilian_e_commerce.zip?rlkey=h2e1u2770aq0ywltlpaapd10a&amp;st=mtznoubo&amp;dl=0 that contains several csv files. I want to download it and decompress it to a subfolder called data. I am running this code in MacOS.</p>
+<div id="f624f476" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the URL and local path for the zip file</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>zip_url <span class="op">=</span> <span class="st">'https://www.dropbox.com/scl/fi/4zxiotlnzt8a6ap2hu0je/brazilian_e_commerce.zip?rlkey=h2e1u2770aq0ywltlpaapd10a&amp;st=mtznoubo&amp;dl=1'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>zip_path <span class="op">=</span> <span class="st">'brazilian_e_commerce.zip'</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the zip file if it doesn't exist</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(zip_path):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(zip_url)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(zip_path, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        f.write(response.content)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the 'data' directory if it doesn't exist</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">'data'</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the zip file into the 'data' directory</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(zip_path, <span class="st">'r'</span>) <span class="im">as</span> zip_ref:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">'data'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prompt-1" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-1">prompt:</h2>
+<p>I want to load all these files into python, so that e.g.&nbsp;olist_customers_dataset is stored as customers, and similarly for all data files whose names begin by olist_</p>
+<div id="6d2ec693" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the list of files in the data directory</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>data_files <span class="op">=</span> os.listdir(<span class="st">'data/'</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through the files and load the ones starting with 'olist_'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> file_name <span class="kw">in</span> data_files:</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> file_name.startswith(<span class="st">'olist_'</span>) <span class="kw">and</span> file_name.endswith(<span class="st">'.csv'</span>):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create a variable name based on the file name</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Remove 'olist_' and '_dataset.csv'</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        var_name <span class="op">=</span> file_name.replace(<span class="st">'olist_'</span>, <span class="st">''</span>).replace(<span class="st">'_dataset.csv'</span>, <span class="st">''</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Load the CSV file into a pandas DataFrame</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>, file_name))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Assign the DataFrame to a variable with the generated name</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">globals</span>()[var_name] <span class="op">=</span> df</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Now you can access the dataframes using the generated names, e.g., 'customers', 'sellers', etc.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="w_DnUBSrRL7c" class="cell" data-executioninfo="{&quot;elapsed&quot;:2072,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751463476987,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: I want to load all these files into python, so that e.g. olist_customers_dataset is stored as customers, and similarly for all data files whose names begin by olist_</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the list of files in the data directory</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>data_files <span class="op">=</span> os.listdir(<span class="st">'data/'</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through the files and load the ones starting with 'olist_'</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> file_name <span class="kw">in</span> data_files:</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> file_name.startswith(<span class="st">'olist_'</span>) <span class="kw">and</span> file_name.endswith(<span class="st">'.csv'</span>):</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create a variable name based on the file name</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Remove 'olist_' and '_dataset.csv'</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        var_name <span class="op">=</span> file_name.replace(<span class="st">'olist_'</span>, <span class="st">''</span>).replace(<span class="st">'_dataset.csv'</span>, <span class="st">''</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Load the CSV file into a pandas DataFrame</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>, file_name))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Assign the DataFrame to a variable with the generated name</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">globals</span>()[var_name] <span class="op">=</span> df</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># You can now access the dataframes using the generated names, e.g., 'customers', 'sellers', etc.</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># For example:</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># print(customers.head())</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co"># print(sellers.head())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prompt-2" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-2">prompt:</h2>
+<p>I want to do basic exploratory analysis on the data in the customers dataframe, what should I do next?</p>
+<div id="KCvDdU1uSKZY" class="cell" data-executioninfo="{&quot;elapsed&quot;:245,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751463477233,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="d5f59d39-972c-4acf-ce57-c9c14be5a2f6" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic exploratory analysis for the customers dataframe</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the first few rows</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"First 5 rows:"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers.head())</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary info</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Info:"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers.info())</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary statistics for numeric columns</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Describe (numeric columns):"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers.describe())</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Show summary statistics for object columns</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Describe (object columns):"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers.describe(include<span class="op">=</span>[<span class="st">'object'</span>]))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing values per column:"</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers.isnull().<span class="bu">sum</span>())</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for duplicate rows</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Number of duplicate rows:"</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(customers.duplicated().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>First 5 rows:
+                        customer_id                customer_unique_id  \
+0  06b8999e2fba1a1fbc88172c00ba8bc7  861eff4711a542e4b93843c6dd7febb0   
+1  18955e83d337fd6b2def6b18a428ac77  290c77bc529b7ac935b93aa66c333dc3   
+2  4e7b3e00288586ebd08712fdd0374a03  060e732b5b29e8181a18229c7b0b2b5e   
+3  b2b6027bc5c5109e529d4dc6358b12c3  259dac757896d24d7702b9acbbff3f3c   
+4  4f2d8ab171c80ec8364f7c12e35b23ad  345ecd01c38d18a9036ed96c73b8d066   
+
+   customer_zip_code_prefix          customer_city customer_state  
+0                     14409                 franca             SP  
+1                      9790  sao bernardo do campo             SP  
+2                      1151              sao paulo             SP  
+3                      8775        mogi das cruzes             SP  
+4                     13056               campinas             SP  
+
+Info:
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 99441 entries, 0 to 99440
+Data columns (total 5 columns):
+ #   Column                    Non-Null Count  Dtype 
+---  ------                    --------------  ----- 
+ 0   customer_id               99441 non-null  object
+ 1   customer_unique_id        99441 non-null  object
+ 2   customer_zip_code_prefix  99441 non-null  int64 
+ 3   customer_city             99441 non-null  object
+ 4   customer_state            99441 non-null  object
+dtypes: int64(1), object(4)
+memory usage: 3.8+ MB
+None
+
+Describe (numeric columns):
+       customer_zip_code_prefix
+count              99441.000000
+mean               35137.474583
+std                29797.938996
+min                 1003.000000
+25%                11347.000000
+50%                24416.000000
+75%                58900.000000
+max                99990.000000
+
+Describe (object columns):
+                             customer_id                customer_unique_id  \
+count                              99441                             99441   
+unique                             99441                             96096   
+top     06b8999e2fba1a1fbc88172c00ba8bc7  8d50f5eadf50201ccdcedfb9e2ac8455   
+freq                                   1                                17   
+
+       customer_city customer_state  
+count          99441          99441  
+unique          4119             27  
+top        sao paulo             SP  
+freq           15540          41746  
+
+Missing values per column:
+customer_id                 0
+customer_unique_id          0
+customer_zip_code_prefix    0
+customer_city               0
+customer_state              0
+dtype: int64
+
+Number of duplicate rows:
+0</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-3" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-3">prompt::</h2>
+<p>How many unique values per column are there?</p>
+<div id="5gLnWV-1TzK6" class="cell" data-executioninfo="{&quot;elapsed&quot;:69,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751463477313,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="3ac7ea04-8f99-4e95-b77e-3ba643dc5c7c" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: How many unique values per column are there?</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the number of unique values in each column</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> customers.columns:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>customers[col]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss"> unique values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>customer_id: 99441 unique values
+customer_unique_id: 96096 unique values
+customer_zip_code_prefix: 14994 unique values
+customer_city: 4119 unique values
+customer_state: 27 unique values</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-4" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-4">prompt:</h2>
+<p>Are there duplicated rows?</p>
+<div id="kfMJaRkpLN6A" class="cell" data-executioninfo="{&quot;elapsed&quot;:44,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751463477362,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="0cc26480-4537-4733-e646-877780983a01" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: Are there duplicated rows?</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Number of duplicate rows:"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.duplicated().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Number of duplicate rows:
+0</code></pre>
+</div>
+</div>
+</section>
+<section id="consider-other-data-sets" class="level2">
+<h2 class="anchored" data-anchor-id="consider-other-data-sets">Consider other data sets</h2>
+</section>
+<section id="prompt-5" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-5">prompt:</h2>
+<p>How do I check all the other datasets at once for missing data and duplicates?</p>
+<div id="OzYNImN8Ll_x" class="cell" data-executioninfo="{&quot;elapsed&quot;:1040,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751463495380,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="a4684d28-9e22-4e40-f7e7-5bb52e2b6307" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: How do I check all the other datasets at once for missing data and duplicates?</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to check for missing data and duplicates in a DataFrame</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_data_quality(df, df_name):</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"--- Checking DataFrame: </span><span class="sc">{</span>df_name<span class="sc">}</span><span class="ss"> ---"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing values per column:"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Number of duplicate rows:"</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.duplicated().<span class="bu">sum</span>())</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> (<span class="bu">len</span>(df_name) <span class="op">+</span> <span class="dv">23</span>))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all variables in the current scope</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>all_vars <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">globals</span>())</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through the variables and check for pandas DataFrames</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> var_name, var_value <span class="kw">in</span> all_vars.items():</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the variable is a pandas DataFrame and its name starts with 'olist_' (after removing 'df_')</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This assumes the convention of naming dataframes after the original file names without 'olist_' and 'dataset'</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(var_value, pd.DataFrame) <span class="kw">and</span> <span class="bu">any</span>(var_name <span class="op">==</span> file_name.replace(<span class="st">'olist_'</span>, <span class="st">''</span>).replace(<span class="st">'_dataset.csv'</span>, <span class="st">''</span>) <span class="cf">for</span> file_name <span class="kw">in</span> data_files <span class="cf">if</span> file_name.startswith(<span class="st">'olist_'</span>)):</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        check_data_quality(var_value, var_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--- Checking DataFrame: sellers ---
+
+Missing values per column:
+seller_id                 0
+seller_zip_code_prefix    0
+seller_city               0
+seller_state              0
+dtype: int64
+
+Number of duplicate rows:
+0
+------------------------------
+--- Checking DataFrame: orders ---
+
+Missing values per column:
+order_id                            0
+customer_id                         0
+order_status                        0
+order_purchase_timestamp            0
+order_approved_at                 160
+order_delivered_carrier_date     1783
+order_delivered_customer_date    2965
+order_estimated_delivery_date       0
+dtype: int64
+
+Number of duplicate rows:
+0
+-----------------------------
+--- Checking DataFrame: order_items ---
+
+Missing values per column:
+order_id               0
+order_item_id          0
+product_id             0
+seller_id              0
+shipping_limit_date    0
+price                  0
+freight_value          0
+dtype: int64
+
+Number of duplicate rows:
+0
+----------------------------------
+--- Checking DataFrame: customers ---
+
+Missing values per column:
+customer_id                 0
+customer_unique_id          0
+customer_zip_code_prefix    0
+customer_city               0
+customer_state              0
+dtype: int64
+
+Number of duplicate rows:
+0
+--------------------------------
+--- Checking DataFrame: geolocation ---
+
+Missing values per column:
+geolocation_zip_code_prefix    0
+geolocation_lat                0
+geolocation_lng                0
+geolocation_city               0
+geolocation_state              0
+dtype: int64
+
+Number of duplicate rows:
+261831
+----------------------------------
+--- Checking DataFrame: order_payments ---
+
+Missing values per column:
+order_id                0
+payment_sequential      0
+payment_type            0
+payment_installments    0
+payment_value           0
+dtype: int64
+
+Number of duplicate rows:
+0
+-------------------------------------
+--- Checking DataFrame: order_reviews ---
+
+Missing values per column:
+review_id                      0
+order_id                       0
+review_score                   0
+review_comment_title       87656
+review_comment_message     58247
+review_creation_date           0
+review_answer_timestamp        0
+dtype: int64
+
+Number of duplicate rows:
+0
+------------------------------------
+--- Checking DataFrame: products ---
+
+Missing values per column:
+product_id                      0
+product_category_name         610
+product_name_lenght           610
+product_description_lenght    610
+product_photos_qty            610
+product_weight_g                2
+product_length_cm               2
+product_height_cm               2
+product_width_cm                2
+dtype: int64
+
+Number of duplicate rows:
+0
+-------------------------------</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-6" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-6">prompt:</h2>
+<p>In the products dataframe there are several columns with the same number of missing data. Are these missing data in the same rows of these columns?</p>
+<div id="oI_HUz36Xv2m" class="cell" data-executioninfo="{&quot;elapsed&quot;:19,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751463819571,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="3c0f3601-e7cb-49ec-b8f1-c8e6e7fede48" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: In the products dataframe there are several columns with the same number of missing data. Are these missing data in the same rows of these columns?</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Find columns in 'products' dataframe with the same number of missing values</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>missing_counts <span class="op">=</span> products.isnull().<span class="bu">sum</span>()</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>cols_with_same_missing <span class="op">=</span> missing_counts[missing_counts <span class="op">&gt;</span> <span class="dv">0</span>].groupby(missing_counts).groups</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the missing data is in the same rows for columns with the same missing count</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> count, cols <span class="kw">in</span> cols_with_same_missing.items():</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(cols) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Checking columns with </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> missing values: </span><span class="sc">{</span><span class="bu">list</span>(cols)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create a boolean mask for missing values in each column</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        missing_masks <span class="op">=</span> {col: products[col].isnull() <span class="cf">for</span> col <span class="kw">in</span> cols}</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check if the missing masks are identical</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        is_same_rows <span class="op">=</span> <span class="bu">all</span>(missing_masks[cols[<span class="dv">0</span>]].equals(missing_masks[col]) <span class="cf">for</span> col <span class="kw">in</span> cols[<span class="dv">1</span>:])</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> is_same_rows:</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"  Missing data is in the same rows for these columns."</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"  Missing data is NOT in the same rows for these columns."</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">len</span>(cols) <span class="op">==</span> <span class="dv">1</span> <span class="kw">and</span> count <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>         <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Column '</span><span class="sc">{</span>cols[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">' has </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> missing values."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Checking columns with 2 missing values: ['product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']
+  Missing data is in the same rows for these columns.
+
+Checking columns with 610 missing values: ['product_category_name', 'product_name_lenght', 'product_description_lenght', 'product_photos_qty']
+  Missing data is in the same rows for these columns.</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-7" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-7">prompt:</h2>
+<p>In the orders dataFrame, I have missing values. It looks like the number of missing values in some columns is correlated. How can I check if the missing values form a pattern and visualize it?</p>
+<div id="zJoqQbWtYPhG" class="cell" data-executioninfo="{&quot;elapsed&quot;:12170,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751463963075,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="a1e8198f-b093-4bec-e8cb-aa38eb3560c4" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: In the orders dataFrame, I have missing values. It looks like the number of missing values in some columns is correlated. How can I check if the missing values form a pattern and visualize it?</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install missingno</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> missingno <span class="im">as</span> msno</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing values in the orders dataframe</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value matrix for 'orders' dataframe:"</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>msno.matrix(orders)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value bar plot for 'orders' dataframe:"</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>msno.bar(orders)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the correlation of missing values between columns</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value correlation heatmap for 'orders' dataframe:"</span>)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>msno.heatmap(orders)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value dendrogram for 'orders' dataframe:"</span>)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>msno.dendrogram(orders)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Requirement already satisfied: missingno in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (0.5.2)
+Requirement already satisfied: numpy in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from missingno) (2.0.2)
+Requirement already satisfied: matplotlib in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from missingno) (3.9.4)
+Requirement already satisfied: scipy in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from missingno) (1.13.1)
+Requirement already satisfied: seaborn in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from missingno) (0.13.2)
+Requirement already satisfied: contourpy&gt;=1.0.1 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (1.3.0)
+Requirement already satisfied: cycler&gt;=0.10 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (0.12.1)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (4.58.4)
+Requirement already satisfied: kiwisolver&gt;=1.3.1 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (1.4.7)
+Requirement already satisfied: packaging&gt;=20.0 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (25.0)
+Requirement already satisfied: pillow&gt;=8 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (11.3.0)
+Requirement already satisfied: pyparsing&gt;=2.3.1 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (3.2.3)
+Requirement already satisfied: python-dateutil&gt;=2.7 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (2.9.0.post0)
+Requirement already satisfied: importlib-resources&gt;=3.2.0 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from matplotlib-&gt;missingno) (6.5.2)
+Requirement already satisfied: zipp&gt;=3.1.0 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from importlib-resources&gt;=3.2.0-&gt;matplotlib-&gt;missingno) (3.23.0)
+Requirement already satisfied: six&gt;=1.5 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib-&gt;missingno) (1.17.0)
+Requirement already satisfied: pandas&gt;=1.2 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from seaborn-&gt;missingno) (2.3.0)
+Requirement already satisfied: pytz&gt;=2020.1 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from pandas&gt;=1.2-&gt;seaborn-&gt;missingno) (2025.2)
+Requirement already satisfied: tzdata&gt;=2022.7 in /Users/fernando/miniconda3/envs/eda_ia/lib/python3.9/site-packages (from pandas&gt;=1.2-&gt;seaborn-&gt;missingno) (2025.2)
+
+Missing value matrix for 'orders' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Missing value bar plot for 'orders' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-10-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Missing value correlation heatmap for 'orders' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-10-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Missing value dendrogram for 'orders' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-10-output-8.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prompt-8" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-8">prompt:</h2>
+<p>Can I do the same check for the missing values pattern and visualize it, this time in the products dataset?</p>
+<div id="YGo5VAVwdAoc" class="cell" data-executioninfo="{&quot;elapsed&quot;:1847,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751465125427,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="3c5b3a27-18ee-496a-fac8-2f94e7979346" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: Can I do the same check for the missing values pattern and visualize it, this time in the products dataset?</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing values in the products dataframe</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value matrix for 'products' dataframe:"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>msno.matrix(products)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value bar plot for 'products' dataframe:"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>msno.bar(products)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the correlation of missing values between columns</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value correlation heatmap for 'products' dataframe:"</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>msno.heatmap(products)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing value dendrogram for 'products' dataframe:"</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>msno.dendrogram(products)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Missing value matrix for 'products' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-11-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Missing value bar plot for 'products' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-11-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Missing value correlation heatmap for 'products' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-11-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Missing value dendrogram for 'products' dataframe:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-11-output-8.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prompt-9" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-9">prompt:</h2>
+<p>Does any of the dataframes contain date or time information?</p>
+<div id="8g4vN7mMeP6Q" class="cell" data-executioninfo="{&quot;elapsed&quot;:1355,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751465442908,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="1540c08a-925c-40c1-d877-8c8a14e0af0d" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: Does any of the dataframes contain date or time information?</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to check if a DataFrame contains columns with date or time information</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> contains_datetime(df, df_name):</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    datetime_cols <span class="op">=</span> []</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> col <span class="kw">in</span> df.columns:</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Attempt to convert the column to datetime</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>            pd.to_datetime(df[col], errors<span class="op">=</span><span class="st">'raise'</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>            datetime_cols.append(col)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> (<span class="pp">ValueError</span>, <span class="pp">TypeError</span>):</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">pass</span> <span class="co"># Not a datetime column</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> datetime_cols:</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"DataFrame '</span><span class="sc">{</span>df_name<span class="sc">}</span><span class="ss">' contains potential datetime columns: </span><span class="sc">{</span>datetime_cols<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"DataFrame '</span><span class="sc">{</span>df_name<span class="sc">}</span><span class="ss">' does not appear to contain datetime columns."</span>)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all variables in the current scope</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>all_vars <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">globals</span>())</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through the variables and check for pandas DataFrames</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>found_datetime_df <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> var_name, var_value <span class="kw">in</span> all_vars.items():</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the variable is a pandas DataFrame and its name starts with 'olist_' (after removing 'df_')</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(var_value, pd.DataFrame) <span class="kw">and</span> <span class="bu">any</span>(var_name <span class="op">==</span> file_name.replace(<span class="st">'olist_'</span>, <span class="st">''</span>).replace(<span class="st">'_dataset.csv'</span>, <span class="st">''</span>) <span class="cf">for</span> file_name <span class="kw">in</span> data_files <span class="cf">if</span> file_name.startswith(<span class="st">'olist_'</span>)):</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> contains_datetime(var_value, var_name):</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>            found_datetime_df <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> found_datetime_df:</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">No DataFrame found in the current scope appears to contain date or time information."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DataFrame 'sellers' contains potential datetime columns: ['seller_zip_code_prefix']
+DataFrame 'orders' contains potential datetime columns: ['order_purchase_timestamp', 'order_approved_at', 'order_delivered_carrier_date', 'order_delivered_customer_date', 'order_estimated_delivery_date']
+DataFrame 'order_items' contains potential datetime columns: ['order_item_id', 'shipping_limit_date', 'price', 'freight_value']
+DataFrame 'customers' contains potential datetime columns: ['customer_zip_code_prefix']
+DataFrame 'geolocation' contains potential datetime columns: ['geolocation_zip_code_prefix', 'geolocation_lat', 'geolocation_lng']
+DataFrame 'order_payments' contains potential datetime columns: ['payment_sequential', 'payment_installments', 'payment_value']
+DataFrame 'order_reviews' contains potential datetime columns: ['review_score', 'review_creation_date', 'review_answer_timestamp']
+DataFrame 'products' contains potential datetime columns: ['product_name_lenght', 'product_description_lenght', 'product_photos_qty', 'product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')
+/var/folders/v_/pl7__6kj0nx_lfsnm4_g91q80000gn/T/ipykernel_70879/1426517338.py:10: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  pd.to_datetime(df[col], errors='raise')</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-can-i-get-all-the-column-names-for-the-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-can-i-get-all-the-column-names-for-the-datasets">prompt: Can I get all the column names for the datasets?</h2>
+<div id="NgwayKTGebgw" class="cell" data-executioninfo="{&quot;elapsed&quot;:9,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1751465673592,&quot;user&quot;:{&quot;displayName&quot;:&quot;Fernando San Segundo&quot;,&quot;userId&quot;:&quot;10314236429123823189&quot;},&quot;user_tz&quot;:-120}" data-outputid="949af95c-4a57-4c12-eec9-bed76035c8ab" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt: Can I get all the column names for the datasets?</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all variables in the current scope</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>all_vars <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">globals</span>())</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate through the variables and print column names for pandas DataFrames</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> var_name, var_value <span class="kw">in</span> all_vars.items():</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the variable is a pandas DataFrame and its name starts with one of the expected names</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(var_value, pd.DataFrame) <span class="kw">and</span> <span class="bu">any</span>(var_name <span class="op">==</span> file_name.replace(<span class="st">'olist_'</span>, <span class="st">''</span>).replace(<span class="st">'_dataset.csv'</span>, <span class="st">''</span>) <span class="cf">for</span> file_name <span class="kw">in</span> data_files <span class="cf">if</span> file_name.startswith(<span class="st">'olist_'</span>)):</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columns for DataFrame '</span><span class="sc">{</span>var_name<span class="sc">}</span><span class="ss">':"</span>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(var_value.columns.tolist())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Columns for DataFrame 'sellers':
+['seller_id', 'seller_zip_code_prefix', 'seller_city', 'seller_state']
+
+Columns for DataFrame 'orders':
+['order_id', 'customer_id', 'order_status', 'order_purchase_timestamp', 'order_approved_at', 'order_delivered_carrier_date', 'order_delivered_customer_date', 'order_estimated_delivery_date']
+
+Columns for DataFrame 'order_items':
+['order_id', 'order_item_id', 'product_id', 'seller_id', 'shipping_limit_date', 'price', 'freight_value']
+
+Columns for DataFrame 'customers':
+['customer_id', 'customer_unique_id', 'customer_zip_code_prefix', 'customer_city', 'customer_state']
+
+Columns for DataFrame 'geolocation':
+['geolocation_zip_code_prefix', 'geolocation_lat', 'geolocation_lng', 'geolocation_city', 'geolocation_state']
+
+Columns for DataFrame 'order_payments':
+['order_id', 'payment_sequential', 'payment_type', 'payment_installments', 'payment_value']
+
+Columns for DataFrame 'order_reviews':
+['review_id', 'order_id', 'review_score', 'review_comment_title', 'review_comment_message', 'review_creation_date', 'review_answer_timestamp']
+
+Columns for DataFrame 'products':
+['product_id', 'product_category_name', 'product_name_lenght', 'product_description_lenght', 'product_photos_qty', 'product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-10" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-10">prompt:</h2>
+<p>My next goal is to assign a customer_unique__id value with each review_id. The order_reviews dataset has a column called order_id, which I would like to use to connect it to the column with the same name in the orders dataset. Then the customer_id column in orders should be connected with the namesake column in customers.</p>
+<div id="33382431" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge order_reviews with orders on 'order_id' to get 'customer_id'</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>reviews_with_customer <span class="op">=</span> order_reviews.merge(orders[[<span class="st">'order_id'</span>, <span class="st">'customer_id'</span>]], on<span class="op">=</span><span class="st">'order_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the result with customers on 'customer_id' to get 'customer_unique_id'</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>reviews_with_customer <span class="op">=</span> reviews_with_customer.merge(customers[[<span class="st">'customer_id'</span>, <span class="st">'customer_unique_id'</span>]], on<span class="op">=</span><span class="st">'customer_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Now each review_id is associated with a customer_unique_id</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reviews_with_customer[[<span class="st">'review_id'</span>, <span class="st">'customer_unique_id'</span>]].head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                          review_id                customer_unique_id
+0  7bc2406110b926393aa56f80a40eba40  68a5590b9926689be4e10f4ae2db21a8
+1  80e641a11e56f04c1ad469d5645fdfde  64190b91b656ab8f37eb89b93dc84584
+2  228ce5500dc1d8e020d8d1322874b6f0  1d47144362c14e94ccdd213e8ec277d5
+3  e64fb393e7b32834bb789ff8bb30750e  c8cf6cb6b838dc7a33ed199b825e8616
+4  f7c4243c7fe1938f181bec41a392bdeb  d16000272660a1fef81482ad75ba572a</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-11" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-11">prompt:</h2>
+<p>Is there any review_id associated with more than one user_unique_id? Is there any review_id associated with no user_unique_id?</p>
+<div id="0a61df5b" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if any review_id is associated with more than one customer_unique_id</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>review_id_counts <span class="op">=</span> reviews_with_customer.groupby(<span class="st">'review_id'</span>)[<span class="st">'customer_unique_id'</span>].nunique()</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>multiple_users <span class="op">=</span> review_id_counts[review_id_counts <span class="op">&gt;</span> <span class="dv">1</span>]</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> multiple_users.empty:</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"review_id(s) associated with more than one customer_unique_id:"</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(multiple_users)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No review_id is associated with more than one customer_unique_id."</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if any review_id is associated with no customer_unique_id (i.e., missing)</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>missing_user <span class="op">=</span> reviews_with_customer[<span class="st">'customer_unique_id'</span>].isnull()</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> missing_user.<span class="bu">any</span>():</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">review_id(s) associated with no customer_unique_id:"</span>)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(reviews_with_customer.loc[missing_user, <span class="st">'review_id'</span>])</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">All review_id values are associated with a customer_unique_id."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>No review_id is associated with more than one customer_unique_id.
+
+All review_id values are associated with a customer_unique_id.</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-12" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-12">prompt:</h2>
+<p>What are the columns of the resulting dataset?</p>
+<div id="30d9edff" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the columns of the reviews_with_customer dataset</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reviews_with_customer.columns.tolist())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['review_id', 'order_id', 'review_score', 'review_comment_title', 'review_comment_message', 'review_creation_date', 'review_answer_timestamp', 'customer_id', 'customer_unique_id']</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-13" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-13">prompt:</h2>
+<p>Can we repeat the merge but this time keeping all the columns in the orders dataset?</p>
+<div id="aa0deac9" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge order_reviews with orders on 'order_id', keeping all columns from orders</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>reviews_with_customer_full <span class="op">=</span> order_reviews.merge(orders, on<span class="op">=</span><span class="st">'order_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the result with customers on 'customer_id' to get 'customer_unique_id'</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>reviews_with_customer_full <span class="op">=</span> reviews_with_customer_full.merge(customers[[<span class="st">'customer_id'</span>, <span class="st">'customer_unique_id'</span>]], on<span class="op">=</span><span class="st">'customer_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the columns of the new merged dataset</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reviews_with_customer_full.columns.tolist())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['review_id', 'order_id', 'review_score', 'review_comment_title', 'review_comment_message', 'review_creation_date', 'review_answer_timestamp', 'customer_id', 'order_status', 'order_purchase_timestamp', 'order_approved_at', 'order_delivered_carrier_date', 'order_delivered_customer_date', 'order_estimated_delivery_date', 'customer_unique_id']</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-14" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-14">prompt:</h2>
+<p>Ok, next I would like to bring in the payment_value information from order_payments</p>
+<div id="3a3c1a13" class="cell" data-vscode="{&quot;languageId&quot;:&quot;ruby&quot;}" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge reviews_with_customer_full with order_payments to bring in payment_value</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If there are multiple payments per order, aggregate the total payment_value per order_id</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>order_payments_sum <span class="op">=</span> order_payments.groupby(<span class="st">'order_id'</span>, as_index<span class="op">=</span><span class="va">False</span>)[<span class="st">'payment_value'</span>].<span class="bu">sum</span>()</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge on 'order_id'</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>reviews_with_customer_full <span class="op">=</span> reviews_with_customer_full.merge(order_payments_sum, on<span class="op">=</span><span class="st">'order_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the columns to confirm payment_value is included</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reviews_with_customer_full.columns.tolist())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['review_id', 'order_id', 'review_score', 'review_comment_title', 'review_comment_message', 'review_creation_date', 'review_answer_timestamp', 'customer_id', 'order_status', 'order_purchase_timestamp', 'order_approved_at', 'order_delivered_carrier_date', 'order_delivered_customer_date', 'order_estimated_delivery_date', 'customer_unique_id', 'payment_value']</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="prompt-15" class="level1">
+<h1>prompt:</h1>
+<p>Can I get information about the order_purchase_timestamp variable in this dataset?</p>
+<div id="38aab4a5" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get info about the 'order_purchase_timestamp' variable in reviews_with_customer_full</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>col <span class="op">=</span> <span class="st">'order_purchase_timestamp'</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Column: </span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dtype: </span><span class="sc">{</span>reviews_with_customer_full[col]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of missing values: </span><span class="sc">{</span>reviews_with_customer_full[col]<span class="sc">.</span>isnull()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Example values:</span><span class="ch">\n</span><span class="sc">{</span>reviews_with_customer_full[col]<span class="sc">.</span>head()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if it can be converted to datetime and show min/max if so</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    order_purchase_dt <span class="op">=</span> pd.to_datetime(reviews_with_customer_full[col])</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Converted to datetime. Range: </span><span class="sc">{</span>order_purchase_dt<span class="sc">.</span><span class="bu">min</span>()<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>order_purchase_dt<span class="sc">.</span><span class="bu">max</span>()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Could not convert to datetime: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Column: order_purchase_timestamp
+Dtype: object
+Number of missing values: 0
+Example values:
+0    2018-01-11 15:30:49
+1    2018-02-28 12:25:19
+2    2018-02-03 09:56:22
+3    2017-04-09 17:41:13
+4    2018-02-10 10:59:03
+Name: order_purchase_timestamp, dtype: object
+
+Converted to datetime. Range: 2016-09-04 21:15:19 to 2018-10-17 17:30:18</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-16" class="level1">
+<h1>prompt:</h1>
+<p>Can we convert that variable in the original dataset to a proper date and time type of variable?</p>
+<div id="5c06d28c" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert 'order_purchase_timestamp' in the original orders dataframe to datetime type</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>orders[<span class="st">'order_purchase_timestamp'</span>] <span class="op">=</span> pd.to_datetime(orders[<span class="st">'order_purchase_timestamp'</span>])</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the result</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(orders[<span class="st">'order_purchase_timestamp'</span>].dtype)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(orders[<span class="st">'order_purchase_timestamp'</span>].head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>datetime64[ns]
+0   2017-10-02 10:56:33
+1   2018-07-24 20:41:37
+2   2018-08-08 08:38:49
+3   2017-11-18 19:28:06
+4   2018-02-13 21:18:39
+Name: order_purchase_timestamp, dtype: datetime64[ns]</code></pre>
+</div>
+</div>
+<section id="prompt-17" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-17">prompt:</h2>
+<p>How many weeks does the order_purchase_timestamp span?</p>
+<div id="c048f80a" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of weeks spanned by the order_purchase_timestamp in the orders dataframe</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>min_date <span class="op">=</span> orders[<span class="st">'order_purchase_timestamp'</span>].<span class="bu">min</span>()</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>max_date <span class="op">=</span> orders[<span class="st">'order_purchase_timestamp'</span>].<span class="bu">max</span>()</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>n_weeks <span class="op">=</span> ((max_date <span class="op">-</span> min_date).days <span class="op">//</span> <span class="dv">7</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The order_purchase_timestamp spans from </span><span class="sc">{</span>min_date<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>max_date<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">, covering </span><span class="sc">{</span>n_weeks<span class="sc">}</span><span class="ss"> weeks."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The order_purchase_timestamp spans from 2016-09-04 to 2018-10-17, covering 111 weeks.</code></pre>
+</div>
+</div>
+</section>
+<section id="prompt-18" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-18">prompt:</h2>
+<p>Can we see a time series plot of the aggregated total value of payment_value per week?</p>
+<div id="86ba596f" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure order_purchase_timestamp is datetime</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>orders[<span class="st">'order_purchase_timestamp'</span>] <span class="op">=</span> pd.to_datetime(orders[<span class="st">'order_purchase_timestamp'</span>])</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge orders with order_payments_sum to get payment_value for each order</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>orders_with_payment <span class="op">=</span> orders.merge(order_payments_sum, on<span class="op">=</span><span class="st">'order_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Set order_purchase_timestamp as index</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>orders_with_payment <span class="op">=</span> orders_with_payment.set_index(<span class="st">'order_purchase_timestamp'</span>)</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample by week and sum payment_value</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>weekly_payments <span class="op">=</span> orders_with_payment[<span class="st">'payment_value'</span>].resample(<span class="st">'W'</span>).<span class="bu">sum</span>()</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the time series</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>weekly_payments.plot()</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Total Payment Value per Week'</span>)</span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Week'</span>)</span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Total Payment Value'</span>)</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prompt-19" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-19">prompt:</h2>
+<p>How could I detect seasonality in the daily series?</p>
+<div id="fbdc3a24" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.tsaplots <span class="im">import</span> plot_acf, plot_pacf</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample to daily total payment value</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>daily_payments <span class="op">=</span> orders_with_payment[<span class="st">'payment_value'</span>].resample(<span class="st">'D'</span>).<span class="bu">sum</span>()</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the daily series</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>daily_payments.plot()</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Total Payment Value per Day'</span>)</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Total Payment Value'</span>)</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot ACF and PACF to detect seasonality</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">8</span>))</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>plot_acf(daily_payments.fillna(<span class="dv">0</span>), lags<span class="op">=</span><span class="dv">60</span>, ax<span class="op">=</span>axes[<span class="dv">0</span>])</span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Autocorrelation (ACF) of Daily Payments'</span>)</span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>plot_pacf(daily_payments.fillna(<span class="dv">0</span>), lags<span class="op">=</span><span class="dv">60</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>])</span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Partial Autocorrelation (PACF) of Daily Payments'</span>)</span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-23-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-23-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="using-the-chat-interface" class="level1">
+<h1>Using the chat interface</h1>
+<p><strong>User:</strong></p>
+<p>In the last plot, of the ACF function, is there any hint of seasonality? Which frequency?</p>
+<div id="28d1492e" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze the ACF plot for seasonality patterns</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the ACF values at specific lags to identify seasonality</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"ACF Analysis for Seasonality Detection:"</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">50</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for weekly seasonality (lag 7, 14, 21, etc.)</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>weekly_lags <span class="op">=</span> [<span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">21</span>, <span class="dv">28</span>]</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Weekly Seasonality Check (lags 7, 14, 21, 28):"</span>)</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> lag <span class="kw">in</span> weekly_lags:</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lag <span class="op">&lt;</span> <span class="bu">len</span>(daily_payments):</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>        correlation <span class="op">=</span> daily_payments.fillna(<span class="dv">0</span>).autocorr(lag<span class="op">=</span>lag)</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Lag </span><span class="sc">{</span>lag<span class="sc">}</span><span class="ss"> (week </span><span class="sc">{</span>lag<span class="op">//</span><span class="dv">7</span><span class="sc">}</span><span class="ss">): ACF = </span><span class="sc">{</span>correlation<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for monthly seasonality (lag 30, 60)</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>monthly_lags <span class="op">=</span> [<span class="dv">30</span>, <span class="dv">60</span>]</span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Monthly Seasonality Check (lags 30, 60):"</span>)</span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> lag <span class="kw">in</span> monthly_lags:</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lag <span class="op">&lt;</span> <span class="bu">len</span>(daily_payments):</span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>        correlation <span class="op">=</span> daily_payments.fillna(<span class="dv">0</span>).autocorr(lag<span class="op">=</span>lag)</span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Lag </span><span class="sc">{</span>lag<span class="sc">}</span><span class="ss">: ACF = </span><span class="sc">{</span>correlation<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Interpretation:"</span>)</span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"- If ACF values at lags 7, 14, 21, 28 are significantly positive, this suggests weekly seasonality"</span>)</span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"- The strongest pattern would typically be at lag 7 (one week)"</span>)</span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"- Values above 0.1-0.2 are generally considered significant for seasonality detection"</span>)</span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"- In e-commerce data, weekly patterns are common due to different shopping behaviors on weekdays vs weekends"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ACF Analysis for Seasonality Detection:
+==================================================
+
+Weekly Seasonality Check (lags 7, 14, 21, 28):
+Lag 7 (week 1): ACF = 0.793
+Lag 14 (week 2): ACF = 0.702
+Lag 21 (week 3): ACF = 0.630
+Lag 28 (week 4): ACF = 0.570
+
+Monthly Seasonality Check (lags 30, 60):
+Lag 30: ACF = 0.496
+Lag 60: ACF = 0.414
+
+Interpretation:
+- If ACF values at lags 7, 14, 21, 28 are significantly positive, this suggests weekly seasonality
+- The strongest pattern would typically be at lag 7 (one week)
+- Values above 0.1-0.2 are generally considered significant for seasonality detection
+- In e-commerce data, weekly patterns are common due to different shopping behaviors on weekdays vs weekends</code></pre>
+</div>
+</div>
+<section id="prompt-20" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-20">prompt:</h2>
+<p>I would like to fit a seasonal ARIMA model to this series. Please do not use AutoARIMA, try to find the model structure by examining the ACF and PACF of the series.</p>
+<div id="9464a286" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.statespace.sarimax <span class="im">import</span> SARIMAX</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Based on the ACF and PACF plots, let's try a SARIMA model with weekly seasonality (seasonal_periods=7)</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: SARIMA(p=1, d=1, q=1, P=1, D=1, Q=1, s=7)</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co"># You may want to adjust these orders based on your ACF/PACF analysis</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>seasonal_periods <span class="op">=</span> <span class="dv">7</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>seasonal_order <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, seasonal_periods)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the SARIMA model</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>sarima_model <span class="op">=</span> SARIMAX(daily_payments, order<span class="op">=</span>order, seasonal_order<span class="op">=</span>seasonal_order, enforce_stationarity<span class="op">=</span><span class="va">False</span>, enforce_invertibility<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>sarima_result <span class="op">=</span> sarima_model.fit(disp<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sarima_result.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                     SARIMAX Results                                     
+=========================================================================================
+Dep. Variable:                     payment_value   No. Observations:                  774
+Model:             SARIMAX(1, 1, 1)x(1, 1, 1, 7)   Log Likelihood               -7879.486
+Date:                           Thu, 03 Jul 2025   AIC                          15768.973
+Time:                                   17:04:36   BIC                          15792.119
+Sample:                               09-04-2016   HQIC                         15777.888
+                                    - 10-17-2018                                         
+Covariance Type:                             opg                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+ar.L1          0.2524      0.058      4.341      0.000       0.138       0.366
+ma.L1         -0.7534      0.050    -15.190      0.000      -0.851      -0.656
+ar.S.L7        0.0576      0.045      1.268      0.205      -0.031       0.147
+ma.S.L7       -0.9470      0.026    -36.071      0.000      -0.998      -0.896
+sigma2      1.004e+08   4.68e-10   2.14e+17      0.000       1e+08       1e+08
+===================================================================================
+Ljung-Box (L1) (Q):                   0.02   Jarque-Bera (JB):            685372.20
+Prob(Q):                              0.88   Prob(JB):                         0.00
+Heteroskedasticity (H):               4.24   Skew:                             7.99
+Prob(H) (two-sided):                  0.00   Kurtosis:                       149.54
+===================================================================================
+
+Warnings:
+[1] Covariance matrix calculated using the outer product of gradients (complex-step).
+[2] Covariance matrix is singular or near-singular, with condition number 1.4e+32. Standard errors may be unstable.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="prompt-21" class="level1">
+<h1>prompt:</h1>
+<p>Can you make diagnostic plots of the residuals for this model?</p>
+<div id="f5d3c7d5" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.tsaplots <span class="im">import</span> plot_acf</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get residuals from the SARIMA model</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>residuals <span class="op">=</span> sarima_result.resid</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals time series plot</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].plot(residuals)</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">'Residuals Time Series'</span>)</span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].set_xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">0</span>].set_ylabel(<span class="st">'Residual'</span>)</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of residuals</span></span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>sns.histplot(residuals, bins<span class="op">=</span><span class="dv">30</span>, kde<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>axes[<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">'Histogram of Residuals'</span>)</span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Q-Q plot</span></span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>stats.probplot(residuals, dist<span class="op">=</span><span class="st">"norm"</span>, plot<span class="op">=</span>axes[<span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">'Q-Q Plot'</span>)</span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ACF plot of residuals</span></span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>plot_acf(residuals, lags<span class="op">=</span><span class="dv">40</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">'ACF of Residuals'</span>)</span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-27-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="prompt-22" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-22">prompt:</h2>
+<p>I would like to conduct a Ljung-Box test to see if those residuals qualify as white noise</p>
+<div id="fd5de2ac" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.stats.diagnostic <span class="im">import</span> acorr_ljungbox</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform Ljung-Box test on SARIMA residuals</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Common choices for lags are 10, 20, and 30</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>ljung_box_result <span class="op">=</span> acorr_ljungbox(residuals, lags<span class="op">=</span>[<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>], return_df<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ljung-Box test results:"</span>)</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ljung_box_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ljung-Box test results:
+      lb_stat  lb_pvalue
+10  11.549079   0.316367
+20  22.702682   0.303628
+30  34.479749   0.262061</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="chat" class="level1">
+<h1>Chat</h1>
+<p><strong>User</strong>.<br>
+You used 10, 20, 30 lags for the Ljung-Box test. What is the rationale behind the choice of a number of lags for this test?</p>
+<p><strong>Assistant</strong>.<br>
+Great question! The choice of the number of lags for the Ljung-Box test is somewhat arbitrary, but there are several important considerations and common practices:</p>
+<section id="general-guidelines" class="level2">
+<h2 class="anchored" data-anchor-id="general-guidelines">General Guidelines:</h2>
+<ol type="1">
+<li><p><strong>Sample Size Constraint</strong>: The number of lags should be much smaller than your sample size. A common rule of thumb is to use no more than n/4 or √n lags, where n is the sample size.</p></li>
+<li><p><strong>Seasonal Patterns</strong>: If you suspect seasonality (like our weekly pattern with period=7), you should test lags that are multiples of the seasonal period. For daily data with weekly seasonality, testing lags 7, 14, 21, 28 would be appropriate.</p></li>
+<li><p><strong>Model Order</strong>: For ARIMA models, you might want to test lags beyond the order of your model to ensure no remaining autocorrelation.</p></li>
+</ol>
+</section>
+<section id="why-10-20-30-lags" class="level2">
+<h2 class="anchored" data-anchor-id="why-10-20-30-lags">Why 10, 20, 30 Lags?</h2>
+<ul>
+<li><strong>Lag 10</strong>: Captures short-term dependencies and is a standard choice for daily data</li>
+<li><strong>Lag 20</strong>: Covers about 3 weeks of daily data, good for detecting medium-term patterns</li>
+<li><strong>Lag 30</strong>: Covers about a month, helps detect longer-term dependencies</li>
+</ul>
+</section>
+<section id="alternative-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="alternative-approaches">Alternative Approaches:</h2>
+<ul>
+<li><strong>Rule of thumb</strong>: Some practitioners use ln(n) lags where n is sample size</li>
+<li><strong>Seasonal-specific</strong>: For our data, testing lags 7, 14, 21 would focus on weekly patterns</li>
+<li><strong>Multiple tests</strong>: Testing several different lag lengths gives a more comprehensive view</li>
+</ul>
+</section>
+<section id="interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation">Interpretation:</h2>
+<ul>
+<li>If p-value &lt; 0.05 at any lag length: Reject null hypothesis (residuals are NOT white noise)</li>
+<li>If p-value &gt; 0.05 at all lag lengths: Fail to reject null hypothesis (residuals resemble white noise)</li>
+</ul>
+<p>The goal is to ensure our SARIMA model has captured all the systematic patterns in the data, leaving only random noise in the residuals.</p>
+</section>
+<section id="prompt-23" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-23">prompt:</h2>
+<p>There is an obvious outlier in the time series. Can you help me find the date when it happened?</p>
+<div id="de50f5ea" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the date with the maximum daily payment value (the outlier)</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>outlier_date <span class="op">=</span> daily_payments.idxmax()</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>outlier_value <span class="op">=</span> daily_payments.<span class="bu">max</span>()</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The largest outlier in the daily payment series occurred on </span><span class="sc">{</span>outlier_date<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> with a value of </span><span class="sc">{</span>outlier_value<span class="sc">:.2f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The largest outlier in the daily payment series occurred on 2017-11-24 with a value of 179200.03.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="chat-1" class="level1">
+<h1>Chat</h1>
+<p><strong>User:</strong></p>
+<p>Is there any reason why 2017-11-24 should be an outlier for e-commerce data in Brazil?</p>
+<p><strong>Assistant:</strong></p>
+<p>Absolutely! November 24, 2017 was <strong>Black Friday</strong>, which explains why it’s such a significant outlier in the Brazilian e-commerce data. Here’s why:</p>
+<section id="black-friday-in-brazil" class="level2">
+<h2 class="anchored" data-anchor-id="black-friday-in-brazil">Black Friday in Brazil</h2>
+<p><strong>Date</strong>: In 2017, Black Friday fell on November 24th (always the Friday after Thanksgiving in the US)</p>
+<p><strong>Impact on Brazilian E-commerce:</strong> - Brazil has enthusiastically adopted Black Friday since around 2010 - It’s become one of the biggest shopping events of the year in Brazil - Online retailers offer massive discounts (often 30-70% off) - Many consumers wait all year for Black Friday deals - E-commerce platforms like Olist see enormous spikes in both order volume and payment values</p>
+</section>
+<section id="why-its-such-a-strong-outlier" class="level2">
+<h2 class="anchored" data-anchor-id="why-its-such-a-strong-outlier">Why It’s Such a Strong Outlier:</h2>
+<ol type="1">
+<li><strong>Concentrated Shopping</strong>: Unlike gradual increases, Black Friday creates an extreme one-day spike</li>
+<li><strong>Higher Basket Values</strong>: People buy more expensive items due to discounts</li>
+<li><strong>Annual Event</strong>: It only happens once per year, making it statistically unusual</li>
+<li><strong>Marketing Hype</strong>: Extensive advertising drives massive consumer participation</li>
+<li><strong>E-commerce Focus</strong>: Many deals are online-only, amplifying the effect on platforms like Olist</li>
+</ol>
+</section>
+<section id="context-in-brazilian-culture" class="level2">
+<h2 class="anchored" data-anchor-id="context-in-brazilian-culture">Context in Brazilian Culture:</h2>
+<ul>
+<li>Black Friday in Brazil often extends to “Black Week” or even “Black November”</li>
+<li>Brazilian consumers are very price-conscious and actively seek deals</li>
+<li>Social media amplifies awareness and participation</li>
+<li>Many retailers report 300-500% increases in sales volume on Black Friday</li>
+</ul>
+<p>This outlier is actually a <strong>positive business insight</strong> - it shows the dataset captures real consumer behavior and major shopping events accurately!</p>
+</section>
+<section id="prompt-24" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-24">prompt:</h2>
+<p>What is the distribution of review scores across different product categories?</p>
+<div id="2e2b5545" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge reviews_with_customer_full with order_items to get product_id for each review</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>reviews_with_product <span class="op">=</span> reviews_with_customer_full.merge(order_items[[<span class="st">'order_id'</span>, <span class="st">'product_id'</span>]], on<span class="op">=</span><span class="st">'order_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge with products to get product_category_name</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>reviews_with_category <span class="op">=</span> reviews_with_product.merge(products[[<span class="st">'product_id'</span>, <span class="st">'product_category_name'</span>]], on<span class="op">=</span><span class="st">'product_id'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Group by product_category_name and review_score, then count occurrences</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>review_score_dist <span class="op">=</span> reviews_with_category.groupby([<span class="st">'product_category_name'</span>, <span class="st">'review_score'</span>]).size().unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the distribution</span></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(review_score_dist)</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: Plot as stacked bar chart for visualization</span></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>review_score_dist.plot(kind<span class="op">=</span><span class="st">'bar'</span>, stacked<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">6</span>))</span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Review Scores by Product Category'</span>)</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Product Category'</span>)</span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Reviews'</span>)</span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Review Score'</span>)</span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>review_score                 1    2    3     4     5
+product_category_name                               
+agro_industria_e_comercio   27    7   13    57   108
+alimentos                   51   13   26    92   313
+alimentos_bebidas           17    5   29    50   178
+artes                       31    7   18    39   112
+artes_e_artesanato           3    0    3     3    15
+...                        ...  ...  ...   ...   ...
+sinalizacao_e_seguranca     20    3   29    33   112
+tablets_impressao_imagem     5    6    6    21    43
+telefonia                  580  181  460   974  2322
+telefonia_fixa              50   17   19    56   120
+utilidades_domesticas      837  249  594  1278  3985
+
+[73 rows x 5 columns]
+review_score                 1    2    3     4     5
+product_category_name                               
+agro_industria_e_comercio   27    7   13    57   108
+alimentos                   51   13   26    92   313
+alimentos_bebidas           17    5   29    50   178
+artes                       31    7   18    39   112
+artes_e_artesanato           3    0    3     3    15
+...                        ...  ...  ...   ...   ...
+sinalizacao_e_seguranca     20    3   29    33   112
+tablets_impressao_imagem     5    6    6    21    43
+telefonia                  580  181  460   974  2322
+telefonia_fixa              50   17   19    56   120
+utilidades_domesticas      837  249  594  1278  3985
+
+[73 rows x 5 columns]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_with_copilot_files/figure-html/cell-30-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="prompt-25" class="level1">
+<h1>prompt:</h1>
+<p>There are too many categories and the boxplots are too small to be informative. Can we group the categories into higher leve categories according to types of products?</p>
+<div id="d3f83013" class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a mapping from detailed product categories to higher-level groups</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>category_group_map <span class="op">=</span> {</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Electronics</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'informatica_acessorios'</span>: <span class="st">'Electronics'</span>,</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'telefonia'</span>: <span class="st">'Electronics'</span>,</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'audio'</span>: <span class="st">'Electronics'</span>,</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'pcs'</span>: <span class="st">'Electronics'</span>,</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'tablets_impressao_imagem'</span>: <span class="st">'Electronics'</span>,</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'consoles_games'</span>: <span class="st">'Electronics'</span>,</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Home &amp; Furniture</span></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'moveis_decoracao'</span>: <span class="st">'Home &amp; Furniture'</span>,</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'cama_mesa_banho'</span>: <span class="st">'Home &amp; Furniture'</span>,</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'utilidades_domesticas'</span>: <span class="st">'Home &amp; Furniture'</span>,</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'moveis_escritorio'</span>: <span class="st">'Home &amp; Furniture'</span>,</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">'moveis_cozinha_area_servico_jantar_e_jardim'</span>: <span class="st">'Home &amp; Furniture'</span>,</span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fashion &amp; Accessories</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">'fashion_bolsas_e_acessorios'</span>: <span class="st">'Fashion'</span>,</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">'fashion_calcados'</span>: <span class="st">'Fashion'</span>,</span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">'fashion_roupa_masculina'</span>: <span class="st">'Fashion'</span>,</span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">'fashion_roupa_feminina'</span>: <span class="st">'Fashion'</span>,</span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">'fashion_underwear_e_moda_praia'</span>: <span class="st">'Fashion'</span>,</span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">'fashion_esporte'</span>: <span class="st">'Fashion'</span>,</span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sports &amp; Leisure</span></span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">'esporte_lazer'</span>: <span class="st">'Sports &amp; Leisure'</span>,</span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">'artes'</span>: <span class="st">'Sports &amp; Leisure'</span>,</span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">'artes_e_artesanato'</span>: <span class="st">'Sports &amp; Leisure'</span>,</span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Health &amp; Beauty</span></span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">'perfumaria'</span>: <span class="st">'Health &amp; Beauty'</span>,</span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">'beleza_saude'</span>: <span class="st">'Health &amp; Beauty'</span>,</span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Baby &amp; Kids</span></span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">'bebes'</span>: <span class="st">'Baby &amp; Kids'</span>,</span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">'brinquedos'</span>: <span class="st">'Baby &amp; Kids'</span>,</span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Food &amp; Drinks</span></span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">'alimentos'</span>: <span class="st">'Food &amp; Drinks'</span>,</span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">'alimentos_bebidas'</span>: <span class="st">'Food &amp; Drinks'</span>,</span>
+<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">'bebidas'</span>: <span class="st">'Food &amp; Drinks'</span>,</span>
+<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Books &amp; Stationery</span></span>
+<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">'livros_tecnicos'</span>: <span class="st">'Books &amp; Stationery'</span>,</span>
+<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">'livros_interesse_geral'</span>: <span class="st">'Books &amp; Stationery'</span>,</span>
+<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">'papelaria'</span>: <span class="st">'Books &amp; Stationery'</span>,</span>
+<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Tools &amp; Construction</span></span>
+<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">'construcao_ferramentas_construcao'</span>: <span class="st">'Tools &amp; Construction'</span>,</span>
+<span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">'construcao_ferramentas_iluminacao'</span>: <span class="st">'Tools &amp; Construction'</span>,</span>
+<span id="cb59-46"><a href="#cb59-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">'construcao_ferramentas_jardim'</span>: <span class="st">'Tools &amp; Construction'</span>,</span>
+<span id="cb59-47"><a href="#cb59-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">'construcao_ferramentas_seguranca'</span>: <span class="st">'Tools &amp; Construction'</span>,</span>
+<span id="cb59-48"><a href="#cb59-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ferramentas_jardim'</span>: <span class="st">'Tools &amp; Construction'</span>,</span>
+<span id="cb59-49"><a href="#cb59-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Others</span></span>
+<span id="cb59-50"><a href="#cb59-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add more mappings as needed...</span></span>
+<span id="cb59-51"><a href="#cb59-51" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-52"><a href="#cb59-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-53"><a href="#cb59-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign higher-level category to each row</span></span>
+<span id="cb59-54"><a href="#cb59-54" aria-hidden="true" tabindex="-1"></a>reviews_with_category[<span class="st">'category_group'</span>] <span class="op">=</span> reviews_with_category[<span class="st">'product_category_name'</span>].<span class="bu">map</span>(category_group_map).fillna(<span class="st">'Other'</span>)</span>
+<span id="cb59-55"><a href="#cb59-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-56"><a href="#cb59-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot boxplots of review scores by higher-level category</span></span>
+<span id="cb59-57"><a href="#cb59-57" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb59-58"><a href="#cb59-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-59"><a href="#cb59-59" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb59-60"><a href="#cb59-60" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span><span class="st">'category_group'</span>, y<span class="op">=</span><span class="st">'review_score'</span>, data<span class="op">=</span>reviews_with_category, order<span class="op">=</span><span class="bu">sorted</span>(reviews_with_category[<span class="st">'category_group'</span>].unique()))</span>
+<span id="cb59-61"><a href="#cb59-61" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Review Score Distribution by Product Category Group'</span>)</span>
+<span id="cb59-62"><a href="#cb59-62" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Product Category Group'</span>)</span>
+<span id="cb59-63"><a href="#cb59-63" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Review Score'</span>)</span>
+<span id="cb59-64"><a href="#cb59-64" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb59-65"><a href="#cb59-65" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb59-66"><a href="#cb59-66" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="prompt-26" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-26">prompt:</h2>
+<p><del>I think that there is a problem with the category mapping, because you are only using English category names, while many of the categories have Portuguese names. Please use the product_category_name_translation.csv file to first translate all Portuguese category names to English and then repeat the analysis.</del></p>
+</section>
+<section id="prompt-27" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-27">prompt:</h2>
+<p>I would like to export the reviews_with_category_and_score dataset as an Excel file and store it in the data folder</p>
+</section>
+</section>
+<section id="install-openpyxl-for-excel-file-operations" class="level1">
+<h1>Install openpyxl for Excel file operations</h1>
+<p>!pip install openpyxl</p>
+<p>print(“Excel file exported successfully to ‘data/reviews_with_category_and_score_Colab.xlsx’”)reviews_with_category.to_excel(‘data/reviews_with_category_and_score_Colab.xlsx’, index=False)# Export the reviews_with_category dataset as an Excel file in the data folder<strong>User:</strong></p>
+<p>Can you make a pdf report summarizing our findings about this dataset? I would like you to include the plots that illustrate some of those findings.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
