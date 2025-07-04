@@ -19,7 +19,7 @@ format:
       data-background-repeat: "no-repeat"
 ---
 
-## Two main applications of AI in Data Analysis
+## Two applications of AI in Data Analysis
 
 + Use AI assistants to write code for Data Analysis  
 (or any other coding task $\to$ broader audience).
@@ -41,7 +41,7 @@ Focus on two assistants:
 
 + Our goal in this example is to illustrate the use of AI code assistants such as Google's Gemini or GitHub Copilot in any task involving code writing. We will use a data analysis problem as an example, but the same general ideas apply to many other situations.
 
-+ The link below (Google account required) opens up a Colab notebook for this example. 
++ The link and QR below (Google account required) opens up a [Colab notebook for this example](https://drive.google.com/file/d/1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE/view?usp=sharing). 
 
 <p align="center">
   <img src="https://apps.icai.comillas.edu/qr/generator.php?url=https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE%2Fview%3Fusp%3Dsharing&size=8&sumbit=Generar+QR" width="250">
@@ -49,7 +49,13 @@ Focus on two assistants:
 
 ## Rerunning the example with GitHub Copilot and VS Code
 
-+ The same example can be used with GitHub Copilot in VS Code. 
++ The same example can be used with GitHub Copilot in VS Code. The notebook can be found in the GitHub repo for this session.
+
++ To run this example you need Python and  a virtual environment, **highly recommended**. The [CONDA_SETUP.html](CONDA_SETUP.html) file in the repository provides some extra information. 
+
++ We have also created a (static snapshot) [html version of the notebook](EDA_with_copilot.html) that you can inspect in a web browser.
+
++ For new Copilot users: [Video recommendation](https://youtu.be/2q0BoioYSxQ) 
 
 ## How to get access to Copilot through GitHub Education
 
@@ -63,17 +69,17 @@ Focus on two assistants:
 
 + [OpenAI API](https://platform.openai.com/docs/api-reference/introduction) and the associated libraries (e.g. for [Python](https://platform.openai.com/docs/libraries/python-library?language=python))  for ChatGPT and related models can be used for that. **Not free!** You pay per tokens read and generated.
 
-+ This can be done by creating a *prompt template* that we can programatically use with our data. E.g. to get simple sentiment analysis classification (*positive/negative*) we traverse our dataset making a prompt for each text we want to classify.
++ This can be done by creating a *prompt template* that we can programatically use with our data. E.g. to get simple sentiment analysis classification (*positive/negative*) we traverse our dataset making a prompt for each text we want to classify. See an example notebook here (for VS code): [OpenAI_API_example.html](OpenAI_API_example.html).
 
 
-## LangChain and Llama-Index
+## DRAFT: LangChain, Llama-Index, Hugging Face, Agents.
 
 
 ## Additional Resources
 
-### Links
+<!-- ### Links -->
 
-+ 
+<!-- +  -->
 
 ### References
 

@@ -162,19 +162,19 @@ Link to GitHub repo below <a href="https://bit.ly/DA_IA">https://bit.ly/DA_IA</a
 <nav role="doc-toc"> 
 <h2 id="toc-title">Contents</h2>
 <ul>
-<li><a href="#/two-main-applications-of-ai-in-data-analysis" id="/toc-two-main-applications-of-ai-in-data-analysis">Two main applications of AI in Data Analysis</a></li>
+<li><a href="#/two-applications-of-ai-in-data-analysis" id="/toc-two-applications-of-ai-in-data-analysis">Two applications of AI in Data Analysis</a></li>
 <li><a href="#/ai-assistants-to-write-code-for-data-analysis" id="/toc-ai-assistants-to-write-code-for-data-analysis">AI assistants to write code for Data Analysis</a></li>
 <li><a href="#/example-with-google-gemini" id="/toc-example-with-google-gemini">Example with Google Gemini</a></li>
 <li><a href="#/rerunning-the-example-with-github-copilot-and-vs-code" id="/toc-rerunning-the-example-with-github-copilot-and-vs-code">Rerunning the example with GitHub Copilot and VS Code</a></li>
 <li><a href="#/how-to-get-access-to-copilot-through-github-education" id="/toc-how-to-get-access-to-copilot-through-github-education">How to get access to Copilot through GitHub Education</a></li>
 <li><a href="#/uses-of-ai-to-actually-do-data-analysis" id="/toc-uses-of-ai-to-actually-do-data-analysis">Uses of AI to <em>actually do</em> Data Analysis</a></li>
-<li><a href="#/langchain-and-llama-index" id="/toc-langchain-and-llama-index">LangChain and Llama-Index</a></li>
+<li><a href="#/draft-langchain-llama-index-hugging-face-agents." id="/toc-draft-langchain-llama-index-hugging-face-agents.">DRAFT: LangChain, Llama-Index, Hugging Face, Agents.</a></li>
 <li><a href="#/additional-resources" id="/toc-additional-resources">Additional Resources</a></li>
 </ul>
 </nav>
 </section>
-<section id="two-main-applications-of-ai-in-data-analysis" class="slide level2">
-<h2>Two main applications of AI in Data Analysis</h2>
+<section id="two-applications-of-ai-in-data-analysis" class="slide level2">
+<h2>Two applications of AI in Data Analysis</h2>
 <ul>
 <li><p>Use AI assistants to write code for Data Analysis<br>
 (or any other coding task <span class="math inline">\(\to\)</span> broader audience).</p></li>
@@ -194,7 +194,7 @@ Link to GitHub repo below <a href="https://bit.ly/DA_IA">https://bit.ly/DA_IA</a
 <h2>Example with Google Gemini</h2>
 <ul>
 <li><p>Our goal in this example is to illustrate the use of AI code assistants such as Google’s Gemini or GitHub Copilot in any task involving code writing. We will use a data analysis problem as an example, but the same general ideas apply to many other situations.</p></li>
-<li><p>The link below (Google account required) opens up a Colab notebook for this example.</p></li>
+<li><p>The link and QR below (Google account required) opens up a <a href="https://drive.google.com/file/d/1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE/view?usp=sharing">Colab notebook for this example</a>.</p></li>
 </ul>
 <p align="center">
 <img src="https://apps.icai.comillas.edu/qr/generator.php?url=https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE%2Fview%3Fusp%3Dsharing&amp;size=8&amp;sumbit=Generar+QR" width="250">
@@ -203,7 +203,10 @@ Link to GitHub repo below <a href="https://bit.ly/DA_IA">https://bit.ly/DA_IA</a
 <section id="rerunning-the-example-with-github-copilot-and-vs-code" class="slide level2">
 <h2>Rerunning the example with GitHub Copilot and VS Code</h2>
 <ul>
-<li>The same example can be used with GitHub Copilot in VS Code.</li>
+<li><p>The same example can be used with GitHub Copilot in VS Code. The notebook can be found in the GitHub repo for this session.</p></li>
+<li><p>To run this example you need Python and a virtual environment, <strong>highly recommended</strong>. The <a href="CONDA_SETUP.html">CONDA_SETUP.html</a> file in the repository provides some extra information.</p></li>
+<li><p>We have also created a (static snapshot) <a href="EDA_with_copilot.html">html version of the notebook</a> that you can inspect in a web browser.</p></li>
+<li><p>For new Copilot users: <a href="https://youtu.be/2q0BoioYSxQ">Video recommendation</a></p></li>
 </ul>
 </section>
 <section id="how-to-get-access-to-copilot-through-github-education" class="slide level2">
@@ -219,18 +222,16 @@ Link to GitHub repo below <a href="https://bit.ly/DA_IA">https://bit.ly/DA_IA</a
 <ul>
 <li><p>LLMs are particularly well-suited for tasks involving NLP: sentiment analysis, text classification, summarization, and question-answering.</p></li>
 <li><p><a href="https://platform.openai.com/docs/api-reference/introduction">OpenAI API</a> and the associated libraries (e.g.&nbsp;for <a href="https://platform.openai.com/docs/libraries/python-library?language=python">Python</a>) for ChatGPT and related models can be used for that. <strong>Not free!</strong> You pay per tokens read and generated.</p></li>
-<li><p>This can be done by creating a <em>prompt template</em> that we can programatically use with our data. E.g. to get simple sentiment analysis classification (<em>positive/negative</em>) we traverse our dataset making a prompt for each text we want to classify.</p></li>
+<li><p>This can be done by creating a <em>prompt template</em> that we can programatically use with our data. E.g. to get simple sentiment analysis classification (<em>positive/negative</em>) we traverse our dataset making a prompt for each text we want to classify. See an example notebook here (for VS code): <a href="OpenAI_API_example.html">OpenAI_API_example.html</a>.</p></li>
 </ul>
 </section>
-<section id="langchain-and-llama-index" class="slide level2">
-<h2>LangChain and Llama-Index</h2>
+<section id="draft-langchain-llama-index-hugging-face-agents." class="slide level2">
+<h2>DRAFT: LangChain, Llama-Index, Hugging Face, Agents.</h2>
 </section>
 <section id="additional-resources" class="slide level2 smaller scrollable">
 <h2>Additional Resources</h2>
-<h3 id="links">Links</h3>
-<ul>
-<li></li>
-</ul>
+<!-- ### Links -->
+<!-- +  -->
 <h3 id="references">References</h3>
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
