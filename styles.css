@@ -1,0 +1,4 @@
+/* Make title on title slide smaller */
+.reveal h1.title {
+  font-size: 2em;
+}

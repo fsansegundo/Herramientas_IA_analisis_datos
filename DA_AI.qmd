@@ -1,0 +1,80 @@
+---
+title: "Herramientas útiles para investigación con análisis de datos"
+author: "Link to GitHub repo below [https://bit.ly/DA_IA](https://bit.ly/DA_IA)"
+bibliography: da_ai.bib
+nocite: |
+  @guja2024starting
+  @trummer-2025
+  @porter-zingaro-2024
+format: 
+  revealjs:
+    toc: true
+    toc-title: "Contents"
+    toc-depth: 2
+    css: styles.css
+    title-slide-attributes:
+      data-background-image: "./fig/QR-github_DA_IA.png"
+      data-background-size: "15%"
+      data-background-position: "bottom"
+      data-background-repeat: "no-repeat"
+---
+
+## Two main applications of AI in Data Analysis
+
++ Use AI assistants to write code for Data Analysis  
+(or any other coding task $\to$ broader audience).
+
++ Use AI to *actually do* Data Analysis
+
+We will focus on the first, but we will also give some hints about the second.
+
+
+## AI assistants to write code for Data Analysis
+
+Focus on two assistants:
+
++ Google's Gemini via Colab. To use Colab and Gemini all you need is a Google account.   
+
++ GitHub's Copilot. We will provide access instructions below. 
+
+## Example with Google Gemini
+
++ Our goal in this example is to illustrate the use of AI code assistants such as Google's Gemini or GitHub Copilot in any task involving code writing. We will use a data analysis problem as an example, but the same general ideas apply to many other situations.
+
++ The link below (Google account required) opens up a Colab notebook for this example. 
+
+<p align="center">
+  <img src="https://apps.icai.comillas.edu/qr/generator.php?url=https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE%2Fview%3Fusp%3Dsharing&size=8&sumbit=Generar+QR" width="250">
+</p>
+
+## Rerunning the example with GitHub Copilot and VS Code
+
++ The same example can be used with GitHub Copilot in VS Code. 
+
+## How to get access to Copilot through GitHub Education
+
++ You need a (free) GitHub account.
++ For academic users (students & teachers) [this link]( https://docs.github.com/en/education/about-github-education/github-education-for-teachers/apply-to-github-education-as-a-teacher) shows how to get a (free) GitHub Education account, that includes Copilot. Also look [here](https://docs.github.com/en/copilot/how-tos/manage-your-account/getting-free-access-to-copilot-pro-as-a-student-teacher-or-maintainer).
++ The recommended way to use it is with [VS Code](https://code.visualstudio.com). Once you have VS Code installed you can follow [these instructions](https://code.visualstudio.com/docs/copilot/setup#_set-up-copilot-in-vs-code). 
+
+## Uses of AI to *actually do* Data Analysis
+
++ LLMs are particularly well-suited for tasks involving NLP: sentiment analysis, text classification, summarization, and question-answering.
+
++ [OpenAI API](https://platform.openai.com/docs/api-reference/introduction) and the associated libraries (e.g. for [Python](https://platform.openai.com/docs/libraries/python-library?language=python))  for ChatGPT and related models can be used for that. **Not free!** You pay per tokens read and generated.
+
++ This can be done by creating a *prompt template* that we can programatically use with our data. E.g. to get simple sentiment analysis classification (*positive/negative*) we traverse our dataset making a prompt for each text we want to classify.
+
+
+## LangChain and Llama-Index
+
+
+## Additional Resources
+
+### Links
+
++ 
+
+### References
+
+

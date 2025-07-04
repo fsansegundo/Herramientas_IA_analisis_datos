@@ -10,4 +10,7 @@ data
 
 # PRIVATE environment variables and API keys
 00_PRIVATE.env
+
+
+# Downloaded data file in zip format
 brazilian_e_commerce.zip
