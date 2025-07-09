@@ -43,6 +43,8 @@ Focus on two assistants:
 
 + The following link (Google account required) opens up a [Colab notebook for this example](https://drive.google.com/file/d/1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE/view?usp=sharing). **When the link opens, click on the button on top.** 
 
++ There is also an static version of a previous run of the notebook that [you can find here](https://fsansegundo.github.io/Herramientas_IA_analisis_datos/EDA_with_gemini_V1.html)
+
 ## Rerunning the example with GitHub Copilot and VS Code
 
 + The same example can be used with GitHub Copilot in VS Code. The notebook can be found in the GitHub repo for this session.
