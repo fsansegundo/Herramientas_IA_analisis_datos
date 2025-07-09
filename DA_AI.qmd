@@ -1,17 +1,18 @@
 ---
 author: "Herramientas útiles para investigación con análisis de datos"
-title: "[https://bit.ly/DA_IA](https://bit.ly/DA_IA)"
+title: "[https://bit.ly/IA_AD](https://bit.ly/IA_AD)"
 bibliography: da_ai.bib
 nocite: |
   @guja2024starting
   @trummer-2025
   @porter-zingaro-2024
+  @lee2024huggingface
 format: 
   revealjs:
     toc: true
     toc-title: "Contents"
     toc-depth: 2
-    # css: styles.css
+    css: styles.css
     # title-slide-attributes:
     #   data-background-image: "./fig/QR-github_DA_IA.png"
     #   data-background-size: "15%"
@@ -47,17 +48,17 @@ Focus on two assistants:
 
 ## Rerunning the example with GitHub Copilot and VS Code
 
-+ The same example can be used with GitHub Copilot in VS Code. The notebook can be found in the GitHub repo for this session.
-
-+ To run this example you need Python and  a virtual environment, **highly recommended**. The [CONDA_SETUP.html](CONDA_SETUP.html) file in the repository provides some extra information. 
++ The same example using GitHub Copilot in VS Code can be found in the GitHub repo for this session.
 
 + We have also created a (static snapshot) [html version of the notebook](EDA_with_copilot.html) that you can inspect in a web browser.
+
++ To try it you need Python and  a virtual environment, **highly recommended**. The [CONDA_SETUP.html](CONDA_SETUP.html) file provides some extra information. **Talk to someone experienced if you are not!**
 
 + For new Copilot users: [Video recommendation](https://youtu.be/2q0BoioYSxQ) 
 
 ## How to get access to Copilot through GitHub Education
 
-+ You need a (free) GitHub account.
++ First you need a (free) [GitHub account](https://github.com/signup) **using the University email**.
 + For academic users (students & teachers) [this link]( https://docs.github.com/en/education/about-github-education/github-education-for-teachers/apply-to-github-education-as-a-teacher) shows how to get a (free) GitHub Education account, that includes Copilot. Also look [here](https://docs.github.com/en/copilot/how-tos/manage-your-account/getting-free-access-to-copilot-pro-as-a-student-teacher-or-maintainer).
 + The recommended way to use it is with [VS Code](https://code.visualstudio.com). Once you have VS Code installed you can follow [these instructions](https://code.visualstudio.com/docs/copilot/setup#_set-up-copilot-in-vs-code). 
 
@@ -65,20 +66,22 @@ Focus on two assistants:
 
 + LLMs are particularly well-suited for tasks involving NLP: sentiment analysis, text classification, summarization, and question-answering.
 
-+ [OpenAI API](https://platform.openai.com/docs/api-reference/introduction) and the associated libraries (e.g. for [Python](https://platform.openai.com/docs/libraries/python-library?language=python))  for ChatGPT and related models can be used for that. **Not free!** You pay per tokens read and generated.
++ [OpenAI API](https://platform.openai.com/docs/api-reference/introduction) offers a [Python library](https://platform.openai.com/docs/libraries/python-library?language=python) that can be used for that. **Not free!** You pay per tokens read and generated (0.02€ for the example below).
 
-+ This can be done by creating a *prompt template* that we can programatically use with our data. E.g. to get simple sentiment analysis classification (*positive/negative*) we traverse our dataset making a prompt for each text we want to classify. See an example notebook here (for VS code): [OpenAI_API_example.html](OpenAI_API_example.html).
-
-
-## DRAFT: LangChain, Llama-Index, Hugging Face, Agents.
++ To do this we create a *prompt template* and programatically use it with our data. For sentiment analysis (*positive/negative*) we create a prompt for each text in the dataset. See an example notebook here (for VS code): [OpenAI_API_example.html](OpenAI_API_example.html).
 
 
-## Additional Resources
+## Hugging Face.
 
-<!-- ### Links -->
++ [Hugging Face](https://huggingface.co) is a company and open-source community best known for the *Transformers Python Library*, with > 1.8M pre-trained models. See the References section.
 
-<!-- +  -->
++ [Hugging Face Spaces](https://huggingface.co/spaces) is a platform that allows hosting and sharing model demos and applications.
 
-### References
++ This [Colab notebook](https://colab.research.google.com/github/fsansegundo/Herramientas_IA_analisis_datos/blob/main/HuggingFace_Example.ipynb) contains a very basic example using some models via Hugging Face.
+
++ Trummer's book introduces LangChain and Llama-Index frameworks to build complex multi-step data analysis pipelines.
+
+
+## References
 
 

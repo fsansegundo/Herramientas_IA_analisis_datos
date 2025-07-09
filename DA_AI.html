@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.6.42">
 
   <meta name="author" content="Herramientas útiles para investigación con análisis de datos">
-  <title>https://bit.ly/DA_IA</title>
+  <title>https://bit.ly/IA_AD</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -50,6 +50,7 @@
       margin-left: 2em;
     }  </style>
   <link rel="stylesheet" href="DA_AI_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="styles.css">
   <link href="DA_AI_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="DA_AI_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="DA_AI_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -147,7 +148,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title"><a href="https://bit.ly/DA_IA">https://bit.ly/DA_IA</a></h1>
+  <h1 class="title"><a href="https://bit.ly/IA_AD">https://bit.ly/IA_AD</a></h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -167,8 +168,8 @@ Herramientas útiles para investigación con análisis de datos
 <li><a href="#/rerunning-the-example-with-github-copilot-and-vs-code" id="/toc-rerunning-the-example-with-github-copilot-and-vs-code">Rerunning the example with GitHub Copilot and VS Code</a></li>
 <li><a href="#/how-to-get-access-to-copilot-through-github-education" id="/toc-how-to-get-access-to-copilot-through-github-education">How to get access to Copilot through GitHub Education</a></li>
 <li><a href="#/uses-of-ai-to-actually-do-data-analysis" id="/toc-uses-of-ai-to-actually-do-data-analysis">Uses of AI to <em>actually do</em> Data Analysis</a></li>
-<li><a href="#/draft-langchain-llama-index-hugging-face-agents." id="/toc-draft-langchain-llama-index-hugging-face-agents.">DRAFT: LangChain, Llama-Index, Hugging Face, Agents.</a></li>
-<li><a href="#/additional-resources" id="/toc-additional-resources">Additional Resources</a></li>
+<li><a href="#/hugging-face." id="/toc-hugging-face.">Hugging Face.</a></li>
+<li><a href="#/references" id="/toc-references">References</a></li>
 </ul>
 </nav>
 </section>
@@ -200,16 +201,16 @@ Herramientas útiles para investigación con análisis de datos
 <section id="rerunning-the-example-with-github-copilot-and-vs-code" class="slide level2">
 <h2>Rerunning the example with GitHub Copilot and VS Code</h2>
 <ul>
-<li><p>The same example can be used with GitHub Copilot in VS Code. The notebook can be found in the GitHub repo for this session.</p></li>
-<li><p>To run this example you need Python and a virtual environment, <strong>highly recommended</strong>. The <a href="CONDA_SETUP.html">CONDA_SETUP.html</a> file in the repository provides some extra information.</p></li>
+<li><p>The same example using GitHub Copilot in VS Code can be found in the GitHub repo for this session.</p></li>
 <li><p>We have also created a (static snapshot) <a href="EDA_with_copilot.html">html version of the notebook</a> that you can inspect in a web browser.</p></li>
+<li><p>To try it you need Python and a virtual environment, <strong>highly recommended</strong>. The <a href="CONDA_SETUP.html">CONDA_SETUP.html</a> file provides some extra information. <strong>Talk to someone experienced if you are not!</strong></p></li>
 <li><p>For new Copilot users: <a href="https://youtu.be/2q0BoioYSxQ">Video recommendation</a></p></li>
 </ul>
 </section>
 <section id="how-to-get-access-to-copilot-through-github-education" class="slide level2">
 <h2>How to get access to Copilot through GitHub Education</h2>
 <ul>
-<li>You need a (free) GitHub account.</li>
+<li>First you need a (free) <a href="https://github.com/signup">GitHub account</a> <strong>using the University email</strong>.</li>
 <li>For academic users (students &amp; teachers) <a href="https://docs.github.com/en/education/about-github-education/github-education-for-teachers/apply-to-github-education-as-a-teacher">this link</a> shows how to get a (free) GitHub Education account, that includes Copilot. Also look <a href="https://docs.github.com/en/copilot/how-tos/manage-your-account/getting-free-access-to-copilot-pro-as-a-student-teacher-or-maintainer">here</a>.</li>
 <li>The recommended way to use it is with <a href="https://code.visualstudio.com">VS Code</a>. Once you have VS Code installed you can follow <a href="https://code.visualstudio.com/docs/copilot/setup#_set-up-copilot-in-vs-code">these instructions</a>.</li>
 </ul>
@@ -218,22 +219,28 @@ Herramientas útiles para investigación con análisis de datos
 <h2>Uses of AI to <em>actually do</em> Data Analysis</h2>
 <ul>
 <li><p>LLMs are particularly well-suited for tasks involving NLP: sentiment analysis, text classification, summarization, and question-answering.</p></li>
-<li><p><a href="https://platform.openai.com/docs/api-reference/introduction">OpenAI API</a> and the associated libraries (e.g.&nbsp;for <a href="https://platform.openai.com/docs/libraries/python-library?language=python">Python</a>) for ChatGPT and related models can be used for that. <strong>Not free!</strong> You pay per tokens read and generated.</p></li>
-<li><p>This can be done by creating a <em>prompt template</em> that we can programatically use with our data. E.g. to get simple sentiment analysis classification (<em>positive/negative</em>) we traverse our dataset making a prompt for each text we want to classify. See an example notebook here (for VS code): <a href="OpenAI_API_example.html">OpenAI_API_example.html</a>.</p></li>
+<li><p><a href="https://platform.openai.com/docs/api-reference/introduction">OpenAI API</a> offers a <a href="https://platform.openai.com/docs/libraries/python-library?language=python">Python library</a> that can be used for that. <strong>Not free!</strong> You pay per tokens read and generated (0.02€ for the example below).</p></li>
+<li><p>To do this we create a <em>prompt template</em> and programatically use it with our data. For sentiment analysis (<em>positive/negative</em>) we create a prompt for each text in the dataset. See an example notebook here (for VS code): <a href="OpenAI_API_example.html">OpenAI_API_example.html</a>.</p></li>
 </ul>
 </section>
-<section id="draft-langchain-llama-index-hugging-face-agents." class="slide level2">
-<h2>DRAFT: LangChain, Llama-Index, Hugging Face, Agents.</h2>
+<section id="hugging-face." class="slide level2">
+<h2>Hugging Face.</h2>
+<ul>
+<li><p><a href="https://huggingface.co">Hugging Face</a> is a company and open-source community best known for the <em>Transformers Python Library</em>, with &gt; 1.8M pre-trained models. See the References section.</p></li>
+<li><p><a href="https://huggingface.co/spaces">Hugging Face Spaces</a> is a platform that allows hosting and sharing model demos and applications.</p></li>
+<li><p>This <a href="https://colab.research.google.com/github/fsansegundo/Herramientas_IA_analisis_datos/blob/main/HuggingFace_Example.ipynb">Colab notebook</a> contains a very basic example using some models via Hugging Face.</p></li>
+<li><p>Trummer’s book introduces LangChain and Llama-Index frameworks to build complex multi-step data analysis pipelines.</p></li>
+</ul>
 </section>
-<section id="additional-resources" class="slide level2 smaller scrollable">
-<h2>Additional Resources</h2>
-<!-- ### Links -->
-<!-- +  -->
-<h3 id="references">References</h3>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-guja2024starting" class="csl-entry" role="listitem">
 Guja, Artur, Marlena Siwiak, and Marian Siwiak. 2024. <em>Starting Data Analytics with Generative AI and Python</em>. Shelter Island, NY: Manning Publications.
+</div>
+<div id="ref-lee2024huggingface" class="csl-entry" role="listitem">
+Lee, Wei-Meng. 2024. <em>Hugging Face in Action</em>. Shelter Island, NY: Manning Publications. <a href="https://www.manning.com/books/hugging-face-in-action">https://www.manning.com/books/hugging-face-in-action</a>.
 </div>
 <div id="ref-porter-zingaro-2024" class="csl-entry" role="listitem">
 Porter, Leo, and Daniel Zingaro. 2024. <em>Learn AI-Assisted Python Programming: With GitHub Copilot and ChatGPT</em>. Manning Publications.
