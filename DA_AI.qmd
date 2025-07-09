@@ -42,7 +42,7 @@ Focus on two assistants:
 
 + Our goal in this example is to illustrate the use of AI code assistants such as Google's Gemini or GitHub Copilot in any task involving code writing. We will use a data analysis problem as an example, but the same general ideas apply to many other situations.
 
-+ The following link (Google account required) opens up a [Colab notebook for this example](https://drive.google.com/file/d/1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE/view?usp=sharing). **When the link opens, click on the button on top.** 
++ The following link (Google account required) opens up a [Colab notebook for this example](https://colab.research.google.com/github/fsansegundo/Herramientas_IA_analisis_datos/blob/main/EDA_with_gemini.ipynb). **When the link opens, click on the button on top.** 
 
 + There is also an static version of a previous run of the notebook that [you can find here](https://fsansegundo.github.io/Herramientas_IA_analisis_datos/EDA_with_gemini_V1.html)
 
