@@ -1,6 +1,6 @@
 ---
-title: "Herramientas útiles para investigación con análisis de datos"
-author: "Link to GitHub repo below [https://bit.ly/DA_IA](https://bit.ly/DA_IA)"
+author: "Herramientas útiles para investigación con análisis de datos"
+title: "[https://bit.ly/DA_IA](https://bit.ly/DA_IA)"
 bibliography: da_ai.bib
 nocite: |
   @guja2024starting
@@ -11,12 +11,12 @@ format:
     toc: true
     toc-title: "Contents"
     toc-depth: 2
-    css: styles.css
-    title-slide-attributes:
-      data-background-image: "./fig/QR-github_DA_IA.png"
-      data-background-size: "15%"
-      data-background-position: "bottom"
-      data-background-repeat: "no-repeat"
+    # css: styles.css
+    # title-slide-attributes:
+    #   data-background-image: "./fig/QR-github_DA_IA.png"
+    #   data-background-size: "15%"
+    #   data-background-position: "bottom"
+    #   data-background-repeat: "no-repeat"
 ---
 
 ## Two applications of AI in Data Analysis
@@ -41,11 +41,7 @@ Focus on two assistants:
 
 + Our goal in this example is to illustrate the use of AI code assistants such as Google's Gemini or GitHub Copilot in any task involving code writing. We will use a data analysis problem as an example, but the same general ideas apply to many other situations.
 
-+ The link and QR below (Google account required) opens up a [Colab notebook for this example](https://drive.google.com/file/d/1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE/view?usp=sharing). 
-
-<p align="center">
-  <img src="https://apps.icai.comillas.edu/qr/generator.php?url=https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE%2Fview%3Fusp%3Dsharing&size=8&sumbit=Generar+QR" width="250">
-</p>
++ The following link (Google account required) opens up a [Colab notebook for this example](https://drive.google.com/file/d/1ZOO9aHIWUMSmeZbf_G8bj2-2LixYzhcE/view?usp=sharing). **When the link opens, click on the button on top.** 
 
 ## Rerunning the example with GitHub Copilot and VS Code
 
