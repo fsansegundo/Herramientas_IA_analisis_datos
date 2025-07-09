@@ -22,10 +22,10 @@ format:
 
 ## Two applications of AI in Data Analysis
 
-+ Use AI assistants to write code for Data Analysis  
++ Use AI assistants to **write code** for Data Analysis  
 (or any other coding task $\to$ broader audience).
 
-+ Use AI to *actually do* Data Analysis
++ Use AI to **actually do Data Analysis-**
 
 We will focus on the first, but we will also give some hints about the second.
 
