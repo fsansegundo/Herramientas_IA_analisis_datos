@@ -25,7 +25,7 @@ format:
 + Use AI assistants to **write code** for Data Analysis  
 (or any other coding task $\to$ broader audience).
 
-+ Use AI to **actually do Data Analysis-**
++ Use AI to **actually do Data Analysis.**
 
 We will focus on the first, but we will also give some hints about the second.
 
@@ -34,9 +34,9 @@ We will focus on the first, but we will also give some hints about the second.
 
 Focus on two assistants:
 
-+ Google's Gemini via Colab. To use Colab and Gemini all you need is a Google account.   
++ **Google's Gemini** via Colab. To use **Colab** and Gemini all you need is a Google account.   
 
-+ GitHub's Copilot. We will provide access instructions below. 
++ **GitHub's Copilot**. We will provide access instructions below. 
 
 ## Example with Google Gemini
 
